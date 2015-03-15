@@ -3,6 +3,15 @@ function Marker(lat, lon, name) {
 	self.lat = lat;
 	self.lon = lon;
 	self.name = ko.observable(name);
+
+	var myLatlng = new google.maps.LatLng(lat,lon);
+	self.marker = new google.maps.Marker({
+    position: myLatlng,
+    title: self.name()
+});
+
+	self.marker.setMap(map);
+
 }
 
 
@@ -16,10 +25,12 @@ function AppViewModel() {
 
 	self.saved_value = ko.observable("");
 
-	self.match = function(str1, str2){
+	self.match = function(str1, str2,i){
 		if(str1.substring(0, str2.length)==str2){
+			self.markers()[i].marker.setMap(map);
 			return true;
 		}else {
+			self.markers()[i].marker.setMap(null);
 			return false;
 		}
 	};

@@ -16,18 +16,6 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCML33qxghXhHMp6WsJcohIZYsi5_hvFQs">
     </script>
 
-    <script type="text/javascript">
-      function initialize() {
-        var mapOptions = {
-          center: { lat: 38.724143, lng: -9.139347}, 
-          zoom: 15
-        };
-        var map = new google.maps.Map(document.getElementById('map-canvas'),
-            mapOptions);
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
-
 </head>
 
 <body>
@@ -36,19 +24,20 @@
 
 	<form>
 		<label>Search:</label>
-		<input type="text" data-bind="value: $root.saved_value, valueUpdate: 'afterkeydown'">
+		<input type="text" data-bind="value: saved_value, valueUpdate: 'afterkeydown'">
 	</form>
 
 	</div>
 
 	<div id="list-view" data-bind="foreach: markers">
 
-		<div data-bind="visible: $root.match(name(), $root.saved_value())">Hello</div>
+		<div data-bind="visible: $root.match(name(), $root.saved_value(),$index())">Hello</div>
 
 
 	</div>
 
 	<div id="map-canvas"></div>
+	<script src="scripts/map.js"></script>
 	<script src="scripts/lib/knockout-3.3.0.js"></script>
 	<script src="scripts/app.js"></script>
 
