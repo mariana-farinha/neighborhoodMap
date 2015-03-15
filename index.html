@@ -36,14 +36,14 @@
 
 	<form>
 		<label>Search:</label>
-		<input type="text">
+		<input type="text" data-bind="value: $root.saved_value, valueUpdate: 'afterkeydown'">
 	</form>
 
 	</div>
 
 	<div id="list-view" data-bind="foreach: markers">
 
-		<div data-bind="text: name"></div>
+		<div data-bind="visible: $root.match(name(), $root.saved_value())">Hello</div>
 
 
 	</div>

@@ -3,9 +3,8 @@ function Marker(lat, lon, name) {
 	self.lat = lat;
 	self.lon = lon;
 	self.name = ko.observable(name);
-	self.display = 0;
-
 }
+
 
 
 function AppViewModel() {
@@ -15,6 +14,15 @@ function AppViewModel() {
 		new Marker(38.714072, -9.133497, "Castelo")
 		]);
 
+	self.saved_value = ko.observable("");
+
+	self.match = function(str1, str2){
+		if(str1.substring(0, str2.length)==str2){
+			return true;
+		}else {
+			return false;
+		}
+	};
 
 
 
