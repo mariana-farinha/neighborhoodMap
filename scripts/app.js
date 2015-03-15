@@ -35,6 +35,27 @@ function AppViewModel() {
 		}
 	};
 
+	var titles = encodeURI(self.markers()[0].name());
+
+
+	for(var i=1; i < self.markers().length; i++) {
+		titles = titles + "|" + encodeURI(self.markers()[i].name());
+
+	}
+
+
+
+	var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=query&titles="+ titles +"&prop=revisions&rvprop=content";
+
+	$.ajax({
+		url: wikiURL,
+		dataType: "jsonp",
+		success: function(response) {
+			console.log(response);
+
+		}
+	})
+
 
 
 }
