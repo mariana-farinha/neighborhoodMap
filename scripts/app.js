@@ -3,14 +3,17 @@ function Marker(lat, lon, name) {
 	self.lat = lat;
 	self.lon = lon;
 	self.name = ko.observable(name);
+	self.infowindow = new google.maps.InfoWindow({
+					content: ""
+				});
 
 	var myLatlng = new google.maps.LatLng(lat,lon);
+
 	self.marker = new google.maps.Marker({
     position: myLatlng,
+    map: map,
     title: self.name()
 });
-
-	self.marker.setMap(map);
 
 }
 
@@ -18,12 +21,13 @@ function Marker(lat, lon, name) {
 
 function AppViewModel() {
 	var self = this;
-	self.markers = ko.observableArray([
-		new Marker(38.714063, -9.138957, "Rossio"),
-		new Marker(38.714072, -9.133497, "Castelo")
-		]);
 
 	self.saved_value = ko.observable("");
+
+	self.markers = ko.observableArray([
+		new Marker(38.714063, -9.138957, "Rossio Square"),
+		new Marker(38.714072, -9.133497, "São Jorge Castle")
+		]);
 
 	self.match = function(str1, str2,i){
 		if(str1.substring(0, str2.length)==str2){
@@ -44,14 +48,28 @@ function AppViewModel() {
 	}
 
 
-
-	var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=query&titles="+ titles +"&prop=revisions&rvprop=content";
+	var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+ titles+"&exlimit=max";
 
 	$.ajax({
 		url: wikiURL,
 		dataType: "jsonp",
 		success: function(response) {
-			console.log(response);
+			var i = 0;
+			for(var obj in response.query.pages) {
+
+				self.markers()[i].marker.infowindow = new google.maps.InfoWindow({
+					content: response.query.pages[obj].extract
+				});
+
+				google.maps.event.addListener(self.markers()[i].marker, 'click', (function(icopy) {
+					return function() {
+					self.markers()[icopy].marker.infowindow.open(map, self.markers()[icopy].marker);
+				};
+			})(i));
+
+				i++;
+			}
+			
 
 		}
 	})
