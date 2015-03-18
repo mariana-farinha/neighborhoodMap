@@ -54,6 +54,7 @@ function AppViewModel() {
 		url: wikiURL,
 		dataType: "jsonp",
 		success: function(response) {
+			console.log(response);
 			var i = 0;
 			for(var obj in response.query.pages) {
 
@@ -62,7 +63,14 @@ function AppViewModel() {
 				});
 
 				google.maps.event.addListener(self.markers()[i].marker, 'click', (function(icopy) {
+
 					return function() {
+
+						for(var j = 0; j < self.markers().length; j++){
+							self.markers()[j].marker.infowindow.close();
+
+						};
+
 					self.markers()[icopy].marker.infowindow.open(map, self.markers()[icopy].marker);
 				};
 			})(i));
