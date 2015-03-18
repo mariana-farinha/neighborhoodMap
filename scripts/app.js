@@ -30,14 +30,22 @@ function AppViewModel() {
 		]);
 
 	self.match = function(str1, str2,i){
-		if(str1.substring(0, str2.length)==str2){
-			self.markers()[i].marker.setMap(map);
-			return true;
-		}else {
-			self.markers()[i].marker.setMap(null);
-			return false;
-		}
+		if(str2){
+		str2 = str2.trim();
+		str1 = str1.trim();
+		for(var k = 0; k < str1.length; k++){
+			if(str1.substring(k, str2.length) == str2){
+				self.markers()[i].marker.setMap(map);
+				return true;
+			};
+		};
+		self.markers()[i].marker.setMap(null);
+		return false;
+	} else {
+		return true;
 	};
+};
+	
 
 	var titles = encodeURI(self.markers()[0].name());
 
@@ -49,12 +57,17 @@ function AppViewModel() {
 
 
 	var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+ titles+"&exlimit=max";
+    
+    var wikiRequestTimeout = setTimeout(function() {
+    	$("#error").text("Failed to get info windows");
+
+    }, 8000)
 
 	$.ajax({
 		url: wikiURL,
 		dataType: "jsonp",
 		success: function(response) {
-			console.log(response);
+			clearTimeout(wikiRequestTimeout);
 			var i = 0;
 			for(var obj in response.query.pages) {
 
@@ -81,7 +94,6 @@ function AppViewModel() {
 
 		}
 	})
-
 
 
 }
