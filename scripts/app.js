@@ -96,10 +96,12 @@ function AppViewModel() {
 
 						for(var j = 0; j < self.markers().length; j++){
 							self.markers()[j].marker.infowindow.close();
+							self.markers()[j].marker.setAnimation(null);
 
 						};
 
 					self.markers()[icopy].marker.infowindow.open(map, self.markers()[icopy].marker);
+					self.markers()[icopy].marker.setAnimation(google.maps.Animation.BOUNCE);
 				};
 			})(i));
 
