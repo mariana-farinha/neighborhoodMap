@@ -41,8 +41,8 @@ function AppViewModel() {
 		if(str2){
 		str2 = str2.trim();
 		str1 = str1.trim();
-		for(var k = 0; k < str1.length; k++){
-			if(str1.substring(k, str2.length) == str2){
+		for(var k = 0; k < str1.length; k++) {
+			if(str1.substring(k, k + str2.length) === str2){
 				self.markers()[i].marker.setMap(map);
 				return true;
 			};
@@ -50,7 +50,10 @@ function AppViewModel() {
 		self.markers()[i].marker.setMap(null);
 		return false;
 	} else {
-		return true;
+		for(var k = 0; k < self.markers().length; k++ ){
+			self.markers()[i].marker.setMap(map);
+			return true;
+		};
 	};
 };
 	
