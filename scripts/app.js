@@ -1,19 +1,27 @@
 function Marker(lat, lon, name) {
 	var self = this;
-	self.lat = lat;
-	self.lon = lon;
+	// latitude 
+	self.lat = ko.observable(lat);
+	// longitude
+	self.lon = ko.observable(lon);
+	// name of the marker
 	self.name = ko.observable(name);
+	// default infowindow with empty content
 	self.infowindow = new google.maps.InfoWindow({
 					content: ""
 				});
 
-	var myLatlng = new google.maps.LatLng(lat,lon);
+	self.myLatlng = ko.computed(function() {
+		return new google.maps.LatLng(self.lat(),self.lon());
+	}, self);
 
-	self.marker = new google.maps.Marker({
-    position: myLatlng,
+	self.marker = ko.computed(function() {
+		return new google.maps.Marker({
+    position: self.myLatlng(),
     map: map,
     title: self.name()
 });
+	}, self);
 
 }
 
@@ -43,15 +51,15 @@ function AppViewModel() {
 		str1 = str1.trim();
 		for(var k = 0; k < str1.length; k++) {
 			if(str1.substring(k, k + str2.length) === str2){
-				self.markers()[i].marker.setMap(map);
+				self.markers()[i].marker().setMap(map);
 				return true;
 			};
 		};
-		self.markers()[i].marker.setMap(null);
+		self.markers()[i].marker().setMap(null);
 		return false;
 	} else {
 		for(var k = 0; k < self.markers().length; k++ ){
-			self.markers()[i].marker.setMap(map);
+			self.markers()[i].marker().setMap(map);
 			return true;
 		};
 	};
@@ -85,22 +93,22 @@ function AppViewModel() {
 			var i = 0;
 			for(var obj in response.query.pages) {
 
-				self.markers()[i].marker.infowindow = new google.maps.InfoWindow({
+				self.markers()[i].marker().infowindow = new google.maps.InfoWindow({
 					content: response.query.pages[obj].extract
 				});
 
-				google.maps.event.addListener(self.markers()[i].marker, 'click', (function(icopy) {
+				google.maps.event.addListener(self.markers()[i].marker(), 'click', (function(icopy) {
 
 					return function() {
 
 						for(var j = 0; j < self.markers().length; j++){
-							self.markers()[j].marker.infowindow.close();
-							self.markers()[j].marker.setAnimation(null);
+							self.markers()[j].marker().infowindow.close();
+							self.markers()[j].marker().setAnimation(null);
 
 						};
 
-					self.markers()[icopy].marker.infowindow.open(map, self.markers()[icopy].marker);
-					self.markers()[icopy].marker.setAnimation(google.maps.Animation.BOUNCE);
+					self.markers()[icopy].marker().infowindow.open(map, self.markers()[icopy].marker());
+					self.markers()[icopy].marker().setAnimation(google.maps.Animation.BOUNCE);
 				};
 			})(i));
 

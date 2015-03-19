@@ -10,12 +10,30 @@
 
 	<title>Project 5</title>
 
+<!-- Use Bootstrap to improve UI !-->
     <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
-	<link href="css/style.css" rel="stylesheet" type="text/css"></link>
 
+<!-- Inlining the CSS will make the page load faster !-->
+	<style>
+	body, html {
+	height: 100%;
+	margin: 0; 
+	padding: 0;
+}
+
+    #map-canvas { 
+	height: 600px;
+	margin: 0; 
+	padding: 0;
+}
+    </style>
+
+<!-- Loading Google Maps API library !-->
 	<script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCML33qxghXhHMp6WsJcohIZYsi5_hvFQs">
     </script>
+
+<!-- Loading jQuery library !-->
     <script src="scripts/lib/jquery-1.11.2.min.js"></script>
 
 </head>
@@ -54,7 +72,7 @@
 
     				<ul class="list-group" id="list-view" data-bind="foreach: markers">
 
-    					<li class="list-group-item" data-bind="text: name() , visible: $root.match(name(), $root.saved_value(),$index())"></li>
+    					<li class="list-group-item" data-bind="text: name , visible: $root.match(name(), $root.saved_value(),$index())"></li>
 
     				</ul>
 
@@ -66,17 +84,20 @@
     	</div>
     </div>
 
+<!-- Inline Javascript to add a Google Map!-->
     <script type="text/javascript">
+
 	var mapOptions = {
     center: { lat: 38.717072, lng: -9.135803}, 
     zoom: 15
 };
 
-var map = new google.maps.Map(document.getElementById('map-canvas'),
+    var map = new google.maps.Map(document.getElementById('map-canvas'),
     mapOptions);
 
 </script>
 
+<!-- Load Knockout library and app.js !-->
 	<script src="scripts/lib/knockout-3.3.0.js"></script>
 	<script src="scripts/app.js"></script>
 
