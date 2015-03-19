@@ -79,7 +79,6 @@ function AppViewModel() {
 		dataType: "jsonp",
 		success: function(response) {
 			clearTimeout(wikiRequestTimeout);
-			console.log(response);
 
 			$("#error").addClass("alert alert-success").text("Success!");
 
