@@ -10,6 +10,7 @@
 
 	<title>Project 5</title>
 
+    <link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"></link>
 	<link href="css/style.css" rel="stylesheet" type="text/css"></link>
 
 	<script type="text/javascript"
@@ -20,26 +21,56 @@
 </head>
 
 <body>
+    <div class="container">
 
-    <div>
+    	<div class="row">
 
-	<form>
-		<label>Search:</label>
-		<input type="text" data-bind="value: saved_value, valueUpdate: 'afterkeydown'">
+    	<div id="error" role="alert"></div>
+
+        </div>
+        <div class="page-header">
+  <h1>Udacity Frontend Nanodegree <small>Project 5</small></h1>
+</div>
+
+    
+    <div class="row">
+    	<div class="col-md-4" >
+    		<div>
+	<form class="navbar-form" role="search">
+		<input type="text" class="form-control" placeholder="Search" data-bind="value: saved_value, valueUpdate: 'afterkeydown'">
 	</form>
+</div>
+	<div>
+
+    <h4>Key locations</h4>
+	<ul class="list-group" id="list-view" data-bind="foreach: markers">
+
+		<li class="list-group-item" data-bind="text: name() , visible: $root.match(name(), $root.saved_value(),$index())"></li>
+
+
+	</ul>
+</div>
+</div>
+
+    
+	<div id="map-canvas" class="col-md-8"></div>
+
 
 	</div>
+</div>
+   
 
-	<div id="list-view" data-bind="foreach: markers">
+	<script type="text/javascript">
+	var mapOptions = {
+    center: { lat: 38.717072, lng: -9.135803}, 
+    zoom: 15
+};
 
-		<div data-bind="visible: $root.match(name(), $root.saved_value(),$index())">Hello</div>
+var map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
 
 
-	</div>
-
-    <div id="error"></div>
-	<div id="map-canvas"></div>
-	<script src="scripts/map.js"></script>
+	</script>
 	<script src="scripts/lib/knockout-3.3.0.js"></script>
 	<script src="scripts/app.js"></script>
 
