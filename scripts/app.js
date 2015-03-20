@@ -26,12 +26,14 @@ function Marker(lat, lon, name) {
 }
 
 
-
+// ViewModel
 function AppViewModel() {
 	var self = this;
 
+    // Stores the search box input value
 	self.saved_value = ko.observable("");
 
+    // Set of markers appearing on the list view
 	self.markers = ko.observableArray([
 		new Marker(38.712088, -9.127635, "Fado"),
 		new Marker(38.752954, -9.184753, "Stadium of Light"),
@@ -44,7 +46,8 @@ function AppViewModel() {
 		new Marker(38.714063, -9.138957, "Rossio Square"),
 		new Marker(38.708847, -9.136921, "Rua Augusta Arch")
 		]);
-
+    
+    //Function that takes to strings and sees if str2 appears in str1
 	self.match = function(str1, str2,i){
 		if(str2){
 		str2 = str2.trim();
@@ -65,7 +68,8 @@ function AppViewModel() {
 	};
 };
 	
-
+    // Create the Ajax request URL  
+    
 	var titles = encodeURI(self.markers()[0].name());
 
 
@@ -74,40 +78,51 @@ function AppViewModel() {
 
 	}
 
-
+    // Final URL
 	var wikiURL = "http://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+ titles+"&exlimit=max";
     
+
+    // Set error message if the response takes more than 8s 
     var wikiRequestTimeout = setTimeout(function() {
     	$("#error").addClass("col-md-12 alert alert-danger").text("Failed to get info windows");
 
     }, 8000)
 
+    // Ajax request
 	$.ajax({
 		url: wikiURL,
 		dataType: "jsonp",
 		success: function(response) {
+			// If the request succeeds clear error timer
 			clearTimeout(wikiRequestTimeout);
-
+            
+            // If the request succeeds send success notification
 			$("#error").addClass("alert alert-success").text("Success!");
 
 			var i = 0;
 			for(var obj in response.query.pages) {
 
 				self.markers()[i].marker().infowindow = new google.maps.InfoWindow({
+					// Set Info Window content using TextExtracts
 					content: response.query.pages[obj].extract
 				});
-
+                
+                // Add click listener to each marker
 				google.maps.event.addListener(self.markers()[i].marker(), 'click', (function(icopy) {
 
 					return function() {
 
 						for(var j = 0; j < self.markers().length; j++){
+
+						    // Close all info windows 
 							self.markers()[j].marker().infowindow.close();
+							// Reset animation
 							self.markers()[j].marker().setAnimation(null);
 
 						};
-
+                    // Open info window on click
 					self.markers()[icopy].marker().infowindow.open(map, self.markers()[icopy].marker());
+					// Animate clicked marker 
 					self.markers()[icopy].marker().setAnimation(google.maps.Animation.BOUNCE);
 				};
 			})(i));
