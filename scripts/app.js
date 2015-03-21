@@ -56,16 +56,16 @@ function AppViewModel() {
 			if(str1.substring(k, k + str2.length) === str2){
 				self.markers()[i].marker().setMap(map);
 				return true;
-			};
-		};
+			}
+		}
 		self.markers()[i].marker().setMap(null);
 		return false;
 	} else {
 		for(var k = 0; k < self.markers().length; k++ ){
 			self.markers()[i].marker().setMap(map);
 			return true;
-		};
-	};
+		}
+	}
 };
 	
     // Create the Ajax request URL  
@@ -86,7 +86,7 @@ function AppViewModel() {
     var wikiRequestTimeout = setTimeout(function() {
     	$("#error").addClass("col-md-12 alert alert-danger").text("Failed to get info windows");
 
-    }, 8000)
+    }, 8000);
 
     // Ajax request
 	$.ajax({
@@ -119,7 +119,7 @@ function AppViewModel() {
 							// Reset animation
 							self.markers()[j].marker().setAnimation(null);
 
-						};
+						}
                     // Open info window on click
 					self.markers()[icopy].marker().infowindow.open(map, self.markers()[icopy].marker());
 					// Animate clicked marker 
@@ -132,7 +132,7 @@ function AppViewModel() {
 			
 
 		}
-	})
+	});
 
 
 }
